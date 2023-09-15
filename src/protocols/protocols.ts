@@ -4,3 +4,9 @@ export type ErrorObject = {
     message: string[]|string,
     status: number
 }
+
+export type People = {
+    id:number,
+    firstName: string,
+    lastName: string
+}

@@ -1,6 +1,6 @@
 import { Router } from "express"
-import movieRoute from "./movies.route"
+import peopleRoute from "./people.route"
 
 const indexRoutes = Router()
-indexRoutes.use(movieRoute)
+indexRoutes.use(peopleRoute)
 export default indexRoutes
