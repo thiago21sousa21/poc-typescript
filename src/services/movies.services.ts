@@ -20,7 +20,6 @@ const deleteMovie = async(id:number)=>{
 
 const toggleStatus = async(id:number) =>{
     let status = await movieRepository.getMovie(id)
-    console.log(status)
     if(status.status===undefined)throw errorsList.notFound('movie')
     status = !status.status;
     const result =  await movieRepository.toggleStatus(id, status);
