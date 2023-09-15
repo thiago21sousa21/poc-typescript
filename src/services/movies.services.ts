@@ -1,33 +1,29 @@
 import errorsList from "../utils/error.list";
 import { movieRepository } from "../repositories/movie.repository"
-
+import { Movie } from "../protocols/protocols";
 
 const getMovies = async()=>{
-    //simplesmente fazer a requisição de puxar todos os dados
     const movies = await movieRepository.getMovies()
-    //dar o retorno do sucesso
     return movies;
 }
 
-const create = async({name, description})=>{
-    //receber um body validado
-    const result = await movieRepository.create(name, description);
+const create = async(movie:Movie)=>{
 
+    const result = await movieRepository.create(movie.title, movie.description);
     if(result===0)throw errorsList.internal
-    //fazer um isert desse body
     return result
 }
 
-const deleteMovie = async(id)=>{
-    //recebr um id
+const deleteMovie = async(id:number)=>{
     const result = await movieRepository.deleteMovie(id);
-    //deletar o filme desse id
 }
 
-const toggleStatus = async(id) =>{
-    //receber um id
-    //trocar o pra false o assistido
-    const result =  await movieRepository.toggleStatus(id);
+const toggleStatus = async(id:number) =>{
+    let status = await movieRepository.getMovie(id)
+    console.log(status)
+    if(status.status===undefined)throw errorsList.notFound('movie')
+    status = !status.status;
+    const result =  await movieRepository.toggleStatus(id, status);
     if(result ===0)throw errorsList.internal
     return result;
 }

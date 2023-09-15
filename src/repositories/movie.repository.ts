@@ -1,40 +1,38 @@
-import { db } from "../database/database"
+import { db } from "../database/connect"
 
 const getMovies = async()=>{
-    //simplesmente fazer a requisição de puxar todos os dados
     const list = await db.query(`
         SELECT * FROM movies;
     `);
     return list.rows;
-    //dar o retorno do sucesso
 }
 
-const create = async(title, description)=>{
-    //receber um body validado
+const getMovie = async(id: number)=>{
+    const movie = await db.query(`
+        SELECT status FROM movies WHERE id = $1;
+    `,[id]);
+    return movie.rows[0];
+}
+
+const create = async(title:string, description:string|void)=>{
     const result = await db.query(`
         INSERT INTO movies (title, description)
             VALUES ($1, $2);
     `, [title, description]);
-    //fazer um isert desse body
     return result.rowCount;
 }
 
-const deleteMovie = async(id)=>{
-    //recebr um id
+const deleteMovie = async(id:number)=>{
     const result = await db.query(`
         DELETE FROM movies WHERE id = $1
     `,[id])
-    //deletar o filme desse id
     return result.rowCount;
-
 }
 
-const toggleStatus = async(id) =>{
-    //receber um id
-    //trocar o pra false o assistido
+const toggleStatus = async(id:number, status:boolean) =>{
     const result = await db.query(`
-        UPDATE movies status = $1 movies WHERE id = $2
-    `,[id])
+        UPDATE movies SET status = $1 WHERE id = $2
+    `,[status,id])
     return result.rowCount;
 }
 
@@ -42,5 +40,6 @@ export const movieRepository = {
     getMovies,
     create,
     deleteMovie,
-    toggleStatus
+    toggleStatus,
+    getMovie
 }
